@@ -1,0 +1,17 @@
+
+# to set the qn for qemu-system-arm so we don't have to type qemu-system-arm
+echo "alias qn='~/qemu-stm32/build/qemu-system-arm'" >> ~/.bashrc
+
+#to permanently set this, the above one only deos this with interactive shells etc, 
+printf '#!/bin/sh\nexec "$HOME/qemu-stm32/build/qemu-system-arm" "$@"\n' > ~/.local/bin/qn
+chmod +x ~/.local/bin/qn
+sed -i "/^alias qn=/d" ~/.bashrc
+unalias qn
+hash -r
+type qn
+
+#meaning of the above command  also the sed one is used to remove the one i didi with the previous command
+- sed -i "/^alias qn=/d" deletes the line that starts with alias qn= from ~/.bashrc. 
+- unalias qn removes it from your current terminal. If it says "not found", that's fine.
+- hash -r makes the shell forget its old lookup.
+- type qn should now print qn is /home/thanos/.local/bin/qn.
